@@ -203,9 +203,7 @@ sail artisan migrate:fresh --seed
 
 ## ER図
 
-ER図作成後に追加
-
----
+![ER図](./screenshots/er-diagram.png)
 
 ## APIエンドポイント一覧
 
