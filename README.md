@@ -1,66 +1,236 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# COACHTECH お問い合わせフォーム
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 概要
 
-## About Laravel
+お問い合わせフォームアプリケーションです。
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+ユーザーはお問い合わせ内容を入力し、確認画面を経由して送信できます。
+また、管理者はお問い合わせ一覧の閲覧や検索、詳細確認ができます。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+本アプリケーションは Laravel 10 を使用した Traditional Web 構成で実装しています。
+また、お問い合わせデータを操作するための API も提供しています。
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 使用技術
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| 項目         | バージョン |
+| ------------ | ---------- |
+| PHP          | 8.2        |
+| Laravel      | 10.x       |
+| MySQL        | 8.0        |
+| Nginx        | Latest     |
+| Tailwind CSS | 3.4.0      |
+| Vite         | Latest     |
+| Docker       | Latest     |
+| Laravel Sail | Latest     |
+| phpMyAdmin   | Latest     |
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 環境構築
 
-## Laravel Sponsors
+### 1. Laravelプロジェクト作成
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+docker run --rm \
+-u "$(id -u):$(id -g)" \
+-v "$(pwd):/var/www/html" \
+-w /var/www/html \
+-e COMPOSER_CACHE_DIR=/tmp/composer_cache \
+laravelsail/php82-composer:latest \
+composer create-project laravel/laravel:^10.0 contact-form-app
+```
 
-### Premium Partners
+### 2. プロジェクトディレクトリへ移動
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+cd contact-form-app
+```
 
-## Contributing
+### 3. Laravel Sailインストール
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+docker run --rm \
+-u "$(id -u):$(id -g)" \
+-v "$(pwd):/var/www/html" \
+-w /var/www/html \
+-e COMPOSER_CACHE_DIR=/tmp/composer_cache \
+laravelsail/php82-composer:latest \
+composer require laravel/sail --dev
+```
 
-## Code of Conduct
+### 4. Sail設定ファイル生成
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+docker run --rm \
+-u "$(id -u):$(id -g)" \
+-v "$(pwd):/var/www/html" \
+-w /var/www/html \
+-e COMPOSER_CACHE_DIR=/tmp/composer_cache \
+laravelsail/php82-composer:latest \
+php artisan sail:install --with=mysql
+```
 
-## Security Vulnerabilities
+### 5. .env設定
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+`.env` を開き、以下の内容になっていることを確認してください。
 
-## License
+```env
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 6. Sail起動
+
+```bash
+./vendor/bin/sail up -d
+```
+
+### 7. Sailエイリアス設定
+
+zshの場合
+
+```bash
+echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.zshrc
+
+exec $SHELL
+```
+
+bashの場合
+
+```bash
+echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.bashrc
+
+exec $SHELL
+```
+
+### 8. フロントエンド環境構築
+
+#### npmパッケージインストール
+
+```bash
+sail npm install
+```
+
+#### Tailwind CSSインストール
+
+```bash
+sail npm install -D tailwindcss@^3.4.0 postcss autoprefixer
+
+sail npm install alpinejs
+```
+
+#### Tailwind設定ファイル生成
+
+```bash
+sail npx tailwindcss init -p
+```
+
+#### tailwind.config.js
+
+```js
+/** @type {import('tailwindcss').Config} */
+export default {
+    content: [
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+    ],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
+};
+```
+
+### 9. 提供リソースの反映
+
+```bash
+git clone https://github.com/coachtech-prepared-file/Preparedblade-ConfirmationTest-ContactForm.git
+```
+
+クローン後、リポジトリ内の `resources` フォルダをプロジェクト直下へコピーしてください。
+
+### 10. Vite起動
+
+```bash
+sail npm run dev
+```
+
+### 11. phpMyAdmin追加
+
+docker-compose.yml に以下を追加
+
+```yaml
+phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+        - "${FORWARD_PHPMYADMIN_PORT:-8080}:80"
+    environment:
+        PMA_HOST: mysql
+        PMA_USER: "${DB_USERNAME}"
+        PMA_PASSWORD: "${DB_PASSWORD}"
+    networks:
+        - sail
+    depends_on:
+        - mysql
+```
+
+### 12. アプリケーションキー生成
+
+```bash
+sail artisan key:generate
+```
+
+### 13. マイグレーション実行
+
+```bash
+sail artisan migrate --seed
+```
+
+データベースを再作成する場合
+
+```bash
+sail artisan migrate:fresh --seed
+```
+
+---
+
+## ER図
+
+ER図作成後に追加
+
+---
+
+## APIエンドポイント一覧
+
+| メソッド | URL                | 概要                 |
+| -------- | ------------------ | -------------------- |
+| GET      | /api/contacts      | お問い合わせ一覧取得 |
+| GET      | /api/contacts/{id} | お問い合わせ詳細取得 |
+| POST     | /api/contacts      | お問い合わせ登録     |
+| PUT      | /api/contacts/{id} | お問い合わせ更新     |
+| DELETE   | /api/contacts/{id} | お問い合わせ削除     |
+
+---
+
+## 開発環境URL
+
+### アプリケーション
+
+http://localhost
+
+### phpMyAdmin
+
+http://localhost:8080
+
+---
+
+## 作成者
+
+新海　圭一郎
