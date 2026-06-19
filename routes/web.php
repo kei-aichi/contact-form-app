@@ -21,3 +21,7 @@ Route::post('/contacts/confirm', [ContactController::class, 'confirm']);
 Route::post('/contacts', [ContactController::class, 'store']);
 
 Route::get('/thanks', [ContactController::class, 'thanks']);
+
+Route::get('/admin', function () {
+    return 'admin';
+})->middleware('auth');
