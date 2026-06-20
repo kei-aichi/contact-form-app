@@ -39,3 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/tags/{tag}', [TagController::class, 'destroy']);
 
 });
+
+Route::get('/admin/tags/{tag}/edit', [TagController::class, 'edit'])
+    ->middleware('auth');
+
+Route::put('/admin/tags/{tag}', [TagController::class, 'update'])
+    ->middleware('auth');
