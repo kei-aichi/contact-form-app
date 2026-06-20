@@ -19,7 +19,7 @@ class ContactFactory extends Factory
     public function definition(): array
     {
         return [
-            'category_id' => Category::inRandomOrder()->first()->id,
+            'category_id' => Category::factory(),
             'first_name' => fake('ja_JP')->firstName(),
             'last_name' => fake('ja_JP')->lastName(),
             'gender' => fake()->randomElement([1, 2, 3]),
