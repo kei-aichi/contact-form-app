@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
@@ -15,7 +16,9 @@ class ContactSeeder extends Seeder
     {
         Contact::factory()
             ->count(20)
-            ->create()
+            ->create([
+                'category_id' => Category::inRandomOrder()->first()->id,
+            ])
             ->each(function ($contact) {
                 $tagIds = Tag::inRandomOrder()
                     ->limit(rand(1, 3))
