@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,3 +32,10 @@ Route::get('/admin/contacts/{contact}', [AdminController::class, 'show'])
 
 Route::delete('/admin/contacts/{contact}', [AdminController::class, 'destroy'])
     ->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+
+    Route::post('/admin/tags', [TagController::class, 'store']);
+    Route::delete('/admin/tags/{tag}', [TagController::class, 'destroy']);
+
+});
