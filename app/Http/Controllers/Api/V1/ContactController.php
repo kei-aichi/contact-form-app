@@ -8,6 +8,7 @@ use App\Http\Requests\Api\V1\StoreContactRequest;
 use App\Http\Requests\Api\V1\UpdateContactRequest;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ContactController extends Controller
@@ -102,8 +103,10 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Contact $contact): JsonResponse
     {
-        //
+        $contact->delete();
+
+        return response()->json(null, 204);
     }
 }
