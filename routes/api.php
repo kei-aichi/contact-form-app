@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
     Route::get('/contacts', [ContactController::class, 'index']);
 });
+
+Route::prefix('v1')->group(function () {
+    Route::get('/contacts', [ContactController::class, 'index']);
+    Route::get('/contacts/{contact}', [ContactController::class, 'show']);
+});
