@@ -21,4 +21,5 @@ Route::prefix('v1')->group(function () {
 Route::prefix('v1')->group(function () {
     Route::get('/contacts', [ContactController::class, 'index']);
     Route::get('/contacts/{contact}', [ContactController::class, 'show']);
+    Route::post('/contacts', [ContactController::class, 'store']);
 });
