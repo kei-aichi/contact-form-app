@@ -48,7 +48,7 @@ return [
     'distinct' => 'The :attribute field has a duplicate value.',
     'doesnt_end_with' => 'The :attribute field must not end with one of the following: :values.',
     'doesnt_start_with' => 'The :attribute field must not start with one of the following: :values.',
-    'email' => 'The :attribute field must be a valid email address.',
+    'email' => ':attributeはメールアドレス形式で入力してください',
     'ends_with' => 'The :attribute field must end with one of the following: :values.',
     'enum' => 'The selected :attribute is invalid.',
     'exists' => 'The selected :attribute is invalid.',
@@ -187,7 +187,15 @@ return [
     */
 
     'attributes' => [
+        'first_name' => '姓',
+        'last_name' => '名',
+        'gender' => '性別',
         'email' => 'メールアドレス',
+        'tel' => '電話番号',
+        'address' => '住所',
+        'building' => '建物名',
+        'category_id' => 'カテゴリ',
+        'detail' => 'お問い合わせ内容',
         'password' => 'パスワード',
     ],
 
