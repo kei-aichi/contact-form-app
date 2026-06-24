@@ -207,13 +207,13 @@ sail artisan migrate:fresh --seed
 
 ## APIエンドポイント一覧
 
-| メソッド | URL                | 概要                 |
-| -------- | ------------------ | -------------------- |
-| GET      | /api/contacts      | お問い合わせ一覧取得 |
-| GET      | /api/contacts/{id} | お問い合わせ詳細取得 |
-| POST     | /api/contacts      | お問い合わせ登録     |
-| PUT      | /api/contacts/{id} | お問い合わせ更新     |
-| DELETE   | /api/contacts/{id} | お問い合わせ削除     |
+| HTTPメソッド | URI                        | 概要                 | ステータス      |
+| ------------ | -------------------------- | -------------------- | --------------- |
+| GET          | /api/v1/contacts           | お問い合わせ一覧取得 | 200 / 422       |
+| GET          | /api/v1/contacts/{contact} | お問い合わせ詳細取得 | 200 / 404       |
+| POST         | /api/v1/contacts           | お問い合わせ作成     | 201 / 422       |
+| PUT          | /api/v1/contacts/{contact} | お問い合わせ更新     | 200 / 404 / 422 |
+| DELETE       | /api/v1/contacts/{contact} | お問い合わせ削除     | 204 / 404       |
 
 ---
 
