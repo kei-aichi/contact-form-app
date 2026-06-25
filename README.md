@@ -13,17 +13,18 @@
 
 ## 使用技術
 
-| 項目           | バージョン     |
-| -------------- | -------------- |
-| PHP            | 8.2            |
-| Laravel        | 10.x           |
-| MySQL          | 8.0            |
-| Nginx          | latest         |
-| Docker         | latest         |
-| Docker Compose | latest         |
-| Laravel Sail   | latest         |
-| phpMyAdmin     | latest         |
-| Node.js / npm  | 使用環境に依存 |
+| 項目           | バージョン             |
+| -------------- | ---------------------- |
+| PHP            | 8.2                    |
+| Laravel        | 10.x                   |
+| MySQL          | 8.0                    |
+| Nginx          | latest                 |
+| Docker         | latest                 |
+| Docker Compose | latest                 |
+| Laravel Sail   | latest                 |
+| phpMyAdmin     | latest                 |
+| Tailwind CSS   | 3.4.x                  |
+| Node.js / npm  | latest（Laravel Sail） |
 
 ---
 
