@@ -5,50 +5,51 @@
 お問い合わせフォームアプリケーションです。
 
 ユーザーはお問い合わせ内容を入力し、確認画面を経由して送信できます。
-また、管理者はお問い合わせ一覧の閲覧や検索、詳細確認ができます。
+管理者はお問い合わせ一覧の閲覧、検索、詳細確認、削除、タグ管理、CSVエクスポートができます。
 
-本アプリケーションは Laravel 10 を使用した Traditional Web 構成で実装しています。
-また、お問い合わせデータを操作するための API も提供しています。
+また、公開APIとしてお問い合わせデータの一覧取得・詳細取得・作成・更新・削除機能を実装しています。
 
 ---
 
 ## 使用技術
 
-| 項目         | バージョン |
-| ------------ | ---------- |
-| PHP          | 8.2        |
-| Laravel      | 10.x       |
-| MySQL        | 8.0        |
-| Nginx        | Latest     |
-| Tailwind CSS | 3.4.0      |
-| Vite         | Latest     |
-| Docker       | Latest     |
-| Laravel Sail | Latest     |
-| phpMyAdmin   | Latest     |
+| 項目           | バージョン     |
+| -------------- | -------------- |
+| PHP            | 8.2            |
+| Laravel        | 10.x           |
+| MySQL          | 8.0            |
+| Nginx          | latest         |
+| Docker         | latest         |
+| Docker Compose | latest         |
+| Laravel Sail   | latest         |
+| phpMyAdmin     | latest         |
+| Node.js / npm  | 使用環境に依存 |
 
 ---
 
-## 環境構築
+# 環境構築
 
-### 1. Laravelプロジェクト作成
+## 1. リポジトリをクローン
+
+GitHubからプロジェクトを取得します。
 
 ```bash
-docker run --rm \
--u "$(id -u):$(id -g)" \
--v "$(pwd):/var/www/html" \
--w /var/www/html \
--e COMPOSER_CACHE_DIR=/tmp/composer_cache \
-laravelsail/php82-composer:latest \
-composer create-project laravel/laravel:^10.0 contact-form-app
+git clone https://github.com/kei-aichi/contact-form-app.git
 ```
 
-### 2. プロジェクトディレクトリへ移動
+---
+
+## 2. プロジェクトディレクトリへ移動
 
 ```bash
 cd contact-form-app
 ```
 
-### 3. Laravel Sailインストール
+---
+
+## 3. Composerパッケージのインストール
+
+Laravelおよび開発に必要なComposerパッケージをインストールします。
 
 ```bash
 docker run --rm \
@@ -57,24 +58,20 @@ docker run --rm \
 -w /var/www/html \
 -e COMPOSER_CACHE_DIR=/tmp/composer_cache \
 laravelsail/php82-composer:latest \
-composer require laravel/sail --dev
+composer install
 ```
 
-### 4. Sail設定ファイル生成
+---
+
+## 4. .envファイルの作成・設定
+
+`.env.example` をコピーして `.env` ファイルを作成します。
 
 ```bash
-docker run --rm \
--u "$(id -u):$(id -g)" \
--v "$(pwd):/var/www/html" \
--w /var/www/html \
--e COMPOSER_CACHE_DIR=/tmp/composer_cache \
-laravelsail/php82-composer:latest \
-php artisan sail:install --with=mysql
+cp .env.example .env
 ```
 
-### 5. .env設定
-
-`.env` を開き、以下の内容になっていることを確認してください。
+`.env` を開き、データベース接続情報が以下のようになっていることを確認してください。
 
 ```env
 DB_CONNECTION=mysql
@@ -85,115 +82,97 @@ DB_USERNAME=sail
 DB_PASSWORD=password
 ```
 
-### 6. Sail起動
+> **重要**
+>
+> `DB_HOST` は `localhost` や `127.0.0.1` ではなく、Dockerコンテナ名である `mysql` を指定してください。
 
-```bash
-./vendor/bin/sail up -d
-```
+---
 
-### 7. Sailエイリアス設定
+## 5. Sailエイリアスの設定（任意）
 
-zshの場合
+毎回 `./vendor/bin/sail` と入力しなくてもよいように、Sailコマンドのエイリアスを設定できます。
+
+### zshの場合
 
 ```bash
 echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.zshrc
-
-exec $SHELL
+source ~/.zshrc
 ```
 
-bashの場合
+### bashの場合
 
 ```bash
 echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.bashrc
-
-exec $SHELL
+source ~/.bashrc
 ```
 
-### 8. フロントエンド環境構築
+以降は `./vendor/bin/sail` の代わりに `sail` コマンドが利用できます。
 
-#### npmパッケージインストール
+---
+
+## 6. Sailを起動
+
+Dockerコンテナをバックグラウンドで起動します。
 
 ```bash
+sail up -d
+```
+
+---
+
+## 7. フロントエンドのセットアップ
+
+Sailコンテナが起動していることを確認してから、npmパッケージをインストールします。
+
+```bash
+
 sail npm install
+
 ```
 
-#### Tailwind CSSインストール
+---
 
-```bash
-sail npm install -D tailwindcss@^3.4.0 postcss autoprefixer
+## 8. Vite開発サーバーを起動
 
-sail npm install alpinejs
-```
-
-#### Tailwind設定ファイル生成
-
-```bash
-sail npx tailwindcss init -p
-```
-
-#### tailwind.config.js
-
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-    content: [
-        "./resources/**/*.blade.php",
-        "./resources/**/*.js",
-        "./resources/**/*.vue",
-    ],
-    theme: {
-        extend: {},
-    },
-    plugins: [],
-};
-```
-
-### 9. 提供リソースの反映
-
-```bash
-git clone https://github.com/coachtech-prepared-file/Preparedblade-ConfirmationTest-ContactForm.git
-```
-
-クローン後、リポジトリ内の `resources` フォルダをプロジェクト直下へコピーしてください。
-
-### 10. Vite起動
+別ターミナルを開き、以下のコマンドを実行してください。
 
 ```bash
 sail npm run dev
 ```
 
-### 11. phpMyAdmin追加
+## Viteは開発中は起動したままにしてください。
 
-docker-compose.yml に以下を追加
+---
 
-```yaml
-phpmyadmin:
-    image: phpmyadmin:latest
-    ports:
-        - "${FORWARD_PHPMYADMIN_PORT:-8080}:80"
-    environment:
-        PMA_HOST: mysql
-        PMA_USER: "${DB_USERNAME}"
-        PMA_PASSWORD: "${DB_PASSWORD}"
-    networks:
-        - sail
-    depends_on:
-        - mysql
+## 9. phpMyAdmin
+
+Sail起動後、以下のURLからphpMyAdminへアクセスできます。
+
+```
+http://localhost:8080
 ```
 
-### 12. アプリケーションキー生成
+---
+
+## 10. アプリケーションキーの生成
+
+以下のコマンドを実行します。
 
 ```bash
 sail artisan key:generate
 ```
 
-### 13. マイグレーション実行
+---
+
+## 11. データベースのマイグレーション・初期データ投入
+
+以下のコマンドでテーブルを作成し、初期データを投入します。
 
 ```bash
 sail artisan migrate --seed
 ```
 
-データベースを再作成する場合
+既存のデータベースをリセットして初期データを再投入する場合は、以下を実行してください。
 
 ```bash
 sail artisan migrate:fresh --seed
@@ -204,6 +183,8 @@ sail artisan migrate:fresh --seed
 ## ER図
 
 ![ER図](./screenshots/er-diagram.png)
+
+---
 
 ## APIエンドポイント一覧
 
@@ -219,16 +200,13 @@ sail artisan migrate:fresh --seed
 
 ## 開発環境URL
 
-### アプリケーション
-
-http://localhost
-
-### phpMyAdmin
-
-http://localhost:8080
+| 項目             | URL                   |
+| ---------------- | --------------------- |
+| アプリケーション | http://localhost      |
+| phpMyAdmin       | http://localhost:8080 |
 
 ---
 
 ## 作成者
 
-新海　圭一郎
+新海 圭一郎
