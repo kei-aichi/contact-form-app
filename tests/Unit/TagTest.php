@@ -2,15 +2,25 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use App\Models\Contact;
+use App\Models\Tag;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TagTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     */
-    public function test_example(): void
+    use RefreshDatabase;
+
+    public function test_tag_belongs_to_many_contacts(): void
     {
-        $this->assertTrue(true);
+        $tag = Tag::factory()->create();
+        $contacts = Contact::factory()->count(2)->create();
+
+        $tag->contacts()->attach($contacts->pluck('id')->toArray());
+
+        $tag->load('contacts');
+
+        $this->assertCount(2, $tag->contacts);
+        $this->assertTrue($tag->contacts->pluck('id')->contains($contacts->first()->id));
     }
 }

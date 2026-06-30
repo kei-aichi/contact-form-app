@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('tel', 11);
             $table->string('address');
             $table->string('building')->nullable();
-            $table->text('detail');
+            $table->string('detail');
             $table->timestamps();
         });
     }
