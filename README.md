@@ -185,11 +185,12 @@ sail artisan migrate:fresh --seed
 
 以下のコマンドでテストを実行できます。
 
-````bash
+```bash
 sail artisan test
 ```
 
 ---
+
 ## ダミーアカウント情報
 
 - name Test User
@@ -253,7 +254,7 @@ erDiagram
     categories ||--o{ contacts : "has many"
     contacts ||--o{ contact_tag : "has many"
     tags ||--o{ contact_tag : "has many"
-````
+```
 
 ---
 
