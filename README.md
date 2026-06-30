@@ -181,6 +181,23 @@ sail artisan migrate:fresh --seed
 
 ---
 
+## テスト実行
+
+以下のコマンドでテストを実行できます。
+
+````bash
+sail artisan test
+```
+
+---
+## ダミーアカウント情報
+
+- name Test User
+- email test@example.com
+- password password
+
+---
+
 ## ER図
 
 ```mermaid
@@ -236,7 +253,7 @@ erDiagram
     categories ||--o{ contacts : "has many"
     contacts ||--o{ contact_tag : "has many"
     tags ||--o{ contact_tag : "has many"
-```
+````
 
 ---
 
